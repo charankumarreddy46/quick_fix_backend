@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServiceCategoryRepository
         extends JpaRepository<ServiceCategory, Long> {
+    boolean existsByNameIgnoreCase(String name);
 }
