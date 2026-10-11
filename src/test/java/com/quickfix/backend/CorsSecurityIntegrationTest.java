@@ -64,6 +64,17 @@ class CorsSecurityIntegrationTest {
     }
 
     @Test
+    void testCorsPreflightForVercelDomain() throws Exception {
+        mockMvc.perform(options("/api/categories")
+                .header(HttpHeaders.ORIGIN, "https://quick-fix-frontend-9hfu.vercel.app")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, "Content-Type,Authorization"))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "https://quick-fix-frontend-9hfu.vercel.app"))
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"));
+    }
+
+    @Test
     void testDisallowedOriginDoesNotGetCorsHeader() throws Exception {
         mockMvc.perform(options("/api/categories")
                 .header(HttpHeaders.ORIGIN, "http://malicious-site.com")
